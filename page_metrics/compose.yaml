@@ -1,0 +1,20 @@
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+
+  tests:
+    depends_on:
+      - localstack
+    environment:
+      AWS_DEFAULT_REGION: eu-west-1
+      AWS_ACCESS_KEY_ID: asd
+      AWS_SECRET_ACCESS_KEY: asdd
+    volumes:
+      - ./:/page_metrics
+    build: .
+    command: >
+      sh -c "pip install -r requirements-test.txt
+             pytest -v tests/unit &&
+             pytest -v tests/integration"
